@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b2a5b">
+  <title>Consultas: Evaluaciones y Calendarios · Colegio Marina de Chile</title>
+  <style>
+    :root {
+      --azul: #0b2a5b;
+      --azul-oscuro: #071c3f;
+      --dorado: #c9a227;
+      --fondo: #f3f5fa;
+      --texto: #1c2540;
+      --blanco: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* ---------- Encabezado ---------- */
+    header {
+      background: linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%);
+      color: var(--blanco);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 4px solid var(--dorado);
+      flex-shrink: 0;
+    }
+    .logo-wrap {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.35));
+    }
+    .logo-fallback {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid var(--dorado);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--dorado);
+    }
+    .titulos h1 {
+      font-size: clamp(1rem, 2.6vw, 1.5rem);
+      letter-spacing: .04em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .titulos p {
+      font-size: clamp(.75rem, 1.8vw, .9rem);
+      color: #d7def0;
+      margin-top: 2px;
+    }
+
+    /* ---------- Pestañas ---------- */
+    nav {
+      display: flex;
+      background: var(--blanco);
+      border-bottom: 1px solid #d5dae8;
+      flex-shrink: 0;
+    }
+    nav button {
+      flex: 1;
+      padding: 14px 10px;
+      border: none;
+      background: transparent;
+      font-size: clamp(.85rem, 2.2vw, 1rem);
+      font-weight: 600;
+      color: #5a6484;
+      cursor: pointer;
+      border-bottom: 4px solid transparent;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    nav button:hover { background: #eef1f9; }
+    nav button.activa {
+      color: var(--azul);
+      border-bottom-color: var(--dorado);
+      background: #f7f9fe;
+    }
+    nav button:focus-visible { outline: 3px solid var(--dorado); outline-offset: -3px; }
+
+    /* ---------- Contenido ---------- */
+    main {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+    .panel {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+    }
+    .panel.activo { display: flex; }
+    .panel iframe {
+      flex: 1;
+      width: 100%;
+      border: 0;
+      background: var(--blanco);
+    }
+    .cargando {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: var(--fondo);
+      color: var(--azul);
+      font-weight: 600;
+      z-index: 2;
+      transition: opacity .3s;
+    }
+    .cargando.oculto { opacity: 0; pointer-events: none; }
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 5px solid #d5dae8;
+      border-top-color: var(--azul);
+      border-radius: 50%;
+      animation: giro 1s linear infinite;
+    }
+    @keyframes giro { to { transform: rotate(360deg); } }
+
+    /* ---------- Pie ---------- */
+    footer {
+      background: var(--azul-oscuro);
+      color: #cfd7ee;
+      font-size: .78rem;
+      padding: 8px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px 14px;
+      flex-shrink: 0;
+    }
+    footer a {
+      color: var(--dorado);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      .logo-wrap, .logo-fallback { width: 50px; height: 50px; }
+      header { gap: 10px; padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-wrap">
+      <img src="logo.png" alt="Logo del Colegio Marina de Chile" id="logo"
+           onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div class="logo-fallback" id="logoFallback">70</div>
+    </div>
+    <div class="titulos">
+      <h1>Consultas: Evaluaciones y Calendarios</h1>
+      <p>Colegio Marina de Chile · Portal de Apoderados</p>
+    </div>
+  </header>
+
+  <nav role="tablist" aria-label="Secciones del portal">
+    <button role="tab" id="tab-calendario" class="activa" data-panel="calendario" aria-selected="true">
+      📅 Calendario de Evaluaciones
+    </button>
+    <button role="tab" id="tab-consulta" data-panel="consulta" aria-selected="false">
+      📝 Consulta de Evaluaciones
+    </button>
+  </nav>
+
+  <main>
+    <section class="panel activo" id="panel-calendario" role="tabpanel" aria-labelledby="tab-calendario">
+      <div class="cargando" id="carga-calendario">
+        <div class="spinner"></div>
+        <span>Cargando calendario…</span>
+      </div>
+      <iframe id="frame-calendario" title="Calendario de Evaluaciones"></iframe>
+    </section>
+
+    <section class="panel" id="panel-consulta" role="tabpanel" aria-labelledby="tab-consulta">
+      <div class="cargando" id="carga-consulta">
+        <div class="spinner"></div>
+        <span>Cargando consulta de evaluaciones…</span>
+      </div>
+      <iframe id="frame-consulta" title="Consulta de Evaluaciones"></iframe>
+    </section>
+  </main>
+
+  <footer>
+    <span>Si la sección no se ve correctamente en su dispositivo,
+      <a id="enlaceExterno" href="#" target="_blank" rel="noopener">ábrala en una pestaña nueva</a>.
+    </span>
+    <span>Colegio Marina de Chile · 70 años · Concepción</span>
+  </footer>
+
+  <script>
+    // ====== CONFIGURACIÓN: enlaces de las dos aplicaciones ======
+    const SECCIONES = {
+      calendario: {
+        url: "https://script.google.com/macros/s/AKfycbyAhtuJ8ES2WQYEsv98gZVlTGxqPh1lOB7du-MAzIVWfJnhE6qlTP2ZRt4_iXNzZwr0/exec",
+        titulo: "Calendario de Evaluaciones"
+      },
+      consulta: {
+        url: "https://script.google.com/macros/s/AKfycbxb62rarb9o7ZzQEaEIm_OULZbyLOsmfL3WO-KAER7kyIQD0WiNVfSuLUwHYY2nzSReVA/exec",
+        titulo: "Consulta de Evaluaciones"
+      }
+    };
+    // ============================================================
+
+    const botones = document.querySelectorAll("nav button");
+    const enlaceExterno = document.getElementById("enlaceExterno");
+    const cargados = {};
+
+    function cargarSeccion(clave) {
+      if (cargados[clave]) return;
+      const frame = document.getElementById("frame-" + clave);
+      const carga = document.getElementById("carga-" + clave);
+      frame.addEventListener("load", () => carga.classList.add("oculto"));
+      frame.src = SECCIONES[clave].url;
+      cargados[clave] = true;
+      // Por seguridad, si tarda demasiado se oculta el mensaje de carga
+      setTimeout(() => carga.classList.add("oculto"), 12000);
+    }
+
+    function mostrarSeccion(clave) {
+      if (!SECCIONES[clave]) clave = "calendario";
+      botones.forEach(b => {
+        const activa = b.dataset.panel === clave;
+        b.classList.toggle("activa", activa);
+        b.setAttribute("aria-selected", activa ? "true" : "false");
+      });
+      document.querySelectorAll(".panel").forEach(p => {
+        p.classList.toggle("activo", p.id === "panel-" + clave);
+      });
+      enlaceExterno.href = SECCIONES[clave].url;
+      cargarSeccion(clave);
+      history.replaceState(null, "", "#" + clave);
+      document.title = SECCIONES[clave].titulo + " · Colegio Marina de Chile";
+    }
+
+    botones.forEach(b => b.addEventListener("click", () => mostrarSeccion(b.dataset.panel)));
+    window.addEventListener("hashchange", () => mostrarSeccion(location.hash.replace("#", "")));
+
+    mostrarSeccion(location.hash.replace("#", "") || "calendario");
+  </script>
+</body>
+</html>
