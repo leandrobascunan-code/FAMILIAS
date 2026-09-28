@@ -18,7 +18,25 @@
       --dorado-claro: #f2d675;
       --fondo: #eef1f8;
       --texto: #1c2540;
+      --brillo1: rgba(201,162,39,.30);
+      --brillo2: rgba(90,140,255,.30);
+      --tinte: #e8eefc;
+      --gris-tab: #e6eaf5;
     }
+
+    /* Paleta de la sección "Consulta Evaluaciones Pendientes" */
+    body[data-seccion="consulta"] {
+      --azul: #0f5c63;
+      --azul-oscuro: #073d43;
+      --dorado: #f28c28;
+      --dorado-claro: #ffc078;
+      --fondo: #e8f4f3;
+      --brillo1: rgba(242,140,40,.35);
+      --brillo2: rgba(45,212,191,.28);
+      --tinte: #dcf1ef;
+      --gris-tab: #d5ebe8;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { height: 100%; }
     body {
@@ -30,6 +48,7 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
+      transition: background .3s;
     }
 
     /* ---------- Encabezado ---------- */
@@ -43,8 +62,8 @@
       align-items: center;
       gap: 16px;
       background:
-        radial-gradient(circle at 10% 130%, rgba(201,162,39,.30), transparent 45%),
-        radial-gradient(circle at 92% -30%, rgba(90,140,255,.30), transparent 45%),
+        radial-gradient(circle at 10% 130%, var(--brillo1), transparent 45%),
+        radial-gradient(circle at 92% -30%, var(--brillo2), transparent 45%),
         linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%);
     }
     header::after {
@@ -90,23 +109,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .btn-externo {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-      color: #fff;
-      text-decoration: none;
-      font-size: .85rem;
-      font-weight: 600;
-      padding: 9px 15px;
-      border: 1px solid rgba(255,255,255,.35);
-      border-radius: 999px;
-      background: rgba(255,255,255,.10);
-      transition: background .2s;
-    }
-    .btn-externo:hover { background: rgba(255,255,255,.22); }
-    .btn-externo svg { width: 18px; height: 18px; }
 
     /* ---------- Pestañas ---------- */
     nav {
@@ -120,11 +122,12 @@
     .tabs {
       display: flex;
       gap: 6px;
-      max-width: 640px;
+      max-width: 820px;
       margin: 0 auto;
-      background: #e6eaf5;
+      background: var(--gris-tab);
       padding: 5px;
       border-radius: 999px;
+      transition: background .3s;
     }
     .tabs button {
       position: relative;
@@ -153,6 +156,15 @@
     }
     .tabs button:focus-visible { outline: 3px solid var(--dorado); outline-offset: 2px; }
     .txt-corto { display: none; }
+
+    /* Colores propios de "Consulta Evaluaciones Pendientes" */
+    .tabs button#tab-consulta { color: #a8480a; }
+    .tabs button#tab-consulta:hover { color: #7c3407; }
+    .tabs button#tab-consulta.activa {
+      background: linear-gradient(135deg, #d4520a, #b03c07);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(212,82,10,.40);
+    }
 
     /* ---------- Consejo para agregar a inicio ---------- */
     .tip {
@@ -239,16 +251,6 @@
     .ayuda.visible { display: block; }
     .ayuda a { color: var(--azul); font-weight: 700; }
 
-    /* ---------- Pie (solo computador) ---------- */
-    footer {
-      order: 5;
-      flex-shrink: 0;
-      text-align: center;
-      font-size: .75rem;
-      color: #6b7594;
-      padding: 4px 14px calc(8px + env(safe-area-inset-bottom, 0px));
-    }
-
     /* ---------- Celular ---------- */
     @media (max-width: 640px) {
       header {
@@ -258,8 +260,6 @@
       .logo-wrap { height: 40px; padding: 4px 7px; border-radius: 10px; }
       .titulos h1 { font-size: .9rem; letter-spacing: .03em; }
       .titulos p { font-size: .68rem; }
-      .btn-externo { padding: 9px; }
-      .btn-externo span { display: none; }
 
       nav {
         order: 4;
@@ -276,7 +276,8 @@
         font-size: .74rem;
       }
       .tabs button svg { width: 24px; height: 24px; }
-      .tabs button.activa { background: #e8eefc; box-shadow: none; }
+      .tabs button.activa { background: var(--tinte); box-shadow: none; }
+      .tabs button#tab-consulta.activa { background: #ffe9d2; color: #a8480a; box-shadow: none; }
       .tabs button.activa::before {
         content: "";
         position: absolute;
@@ -291,7 +292,6 @@
 
       main { padding: 0; }
       .marco { max-width: none; border-radius: 0; box-shadow: none; }
-      footer { display: none; }
     }
 
     /* ---------- Celular en horizontal ---------- */
@@ -302,7 +302,6 @@
       nav { padding-top: 4px; padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)); }
       .tabs button { flex-direction: row; padding: 6px; gap: 6px; }
       .tabs button svg { width: 20px; height: 20px; }
-      footer { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -310,7 +309,7 @@
     }
   </style>
 </head>
-<body>
+<body data-seccion="calendario">
 
   <header>
     <div class="logo-wrap">
@@ -322,11 +321,6 @@
       <h1>Consultas: Evaluaciones y Calendarios</h1>
       <p>Colegio Marina de Chile · Portal de Apoderados</p>
     </div>
-    <a id="btnExterno" class="btn-externo" href="#" target="_blank" rel="noopener"
-       aria-label="Abrir esta sección en una pestaña nueva" title="Abrir en una pestaña nueva">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/></svg>
-      <span>Abrir aparte</span>
-    </a>
   </header>
 
   <nav aria-label="Secciones del portal">
@@ -339,9 +333,9 @@
       </button>
       <button role="tab" id="tab-consulta" data-panel="consulta"
               aria-selected="false" aria-controls="panel-consulta">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
-        <span class="txt-largo">Consulta de Evaluaciones</span>
-        <span class="txt-corto">Consulta</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span class="txt-largo">Consulta Evaluaciones Pendientes</span>
+        <span class="txt-corto">Evaluaciones pendientes</span>
       </button>
     </div>
   </nav>
@@ -367,17 +361,15 @@
       <section class="panel" id="panel-consulta" role="tabpanel" aria-labelledby="tab-consulta">
         <div class="cargando" id="carga-consulta">
           <div class="spinner"></div>
-          <span>Cargando consulta de evaluaciones…</span>
+          <span>Cargando evaluaciones pendientes…</span>
           <p class="ayuda" id="ayuda-consulta">¿Tarda demasiado?
             <a id="aparte-consulta" href="#" target="_blank" rel="noopener">Ábralo en una pestaña nueva</a>.</p>
         </div>
-        <iframe id="frame-consulta" title="Consulta de Evaluaciones"
+        <iframe id="frame-consulta" title="Consulta Evaluaciones Pendientes"
                 allow="clipboard-write; web-share; fullscreen"></iframe>
       </section>
     </div>
   </main>
-
-  <footer>Colegio Marina de Chile · 70 años · Concepción</footer>
 
   <script>
     // ====== CONFIGURACIÓN: enlaces de las dos aplicaciones ======
@@ -388,13 +380,12 @@
       },
       consulta: {
         url: "https://script.google.com/macros/s/AKfycbxb62rarb9o7ZzQEaEIm_OULZbyLOsmfL3WO-KAER7kyIQD0WiNVfSuLUwHYY2nzSReVA/exec",
-        titulo: "Consulta de Evaluaciones"
+        titulo: "Consulta Evaluaciones Pendientes"
       }
     };
     // ============================================================
 
     const botones = document.querySelectorAll(".tabs button");
-    const btnExterno = document.getElementById("btnExterno");
     const cargados = {};
 
     // Enlaces de "abrir en pestaña nueva" dentro de la pantalla de carga
@@ -424,7 +415,8 @@
       document.querySelectorAll(".panel").forEach(p => {
         p.classList.toggle("activo", p.id === "panel-" + clave);
       });
-      btnExterno.href = SECCIONES[clave].url;
+      document.body.dataset.seccion = clave;
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", clave === "consulta" ? "#073d43" : "#0b2a5b");
       cargarSeccion(clave);
       history.replaceState(null, "", "#" + clave);
       document.title = SECCIONES[clave].titulo + " · Colegio Marina de Chile";
